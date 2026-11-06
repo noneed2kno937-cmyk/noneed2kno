@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Release Desk | NONEED2KNO</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #0b0b0b;
+    --panel: #141414;
+    --line: #262626;
+    --text: #f2f2f2;
+    --muted: #9a9a9a;
+    --green: #1ed760;
+    --red: #ff5a5a;
+    --amber: #f5b942;
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+}
+h1, h2, h3 { font-family: 'Oswald', sans-serif; letter-spacing: 2px; margin: 0 0 12px; }
+a { color: var(--green); }
+.wrap { max-width: 960px; margin: 0 auto; padding: 24px 16px 80px; }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.top a { color: var(--muted); text-decoration: none; font-family: 'Oswald'; letter-spacing: 1px; }
+.lede { color: var(--muted); margin: 0 0 28px; }
+.note {
+    border-left: 3px solid var(--amber);
+    background: #1a160c;
+    padding: 12px 14px;
+    margin: 0 0 28px;
+    font-size: 14px;
+}
+.step {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.step h2 { font-size: 1.3rem; display: flex; align-items: center; gap: 10px; }
+.num {
+    display: inline-flex; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--text); color: #000; align-items: center; justify-content: center;
+    font-size: 0.95rem; letter-spacing: 0;
+}
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+input, select, textarea {
+    width: 100%; padding: 10px; background: #0e0e0e; color: var(--text);
+    border: 1px solid var(--line); border-radius: 5px; font: inherit;
+}
+textarea { min-height: 70px; resize: vertical; }
+input[type=checkbox] { width: auto; }
+.check { display: flex; align-items: center; gap: 8px; color: var(--text); font-size: 14px; }
+.btn {
+    display: inline-block; padding: 10px 20px; background: var(--text); color: #000;
+    border: 0; border-radius: 5px; font-family: 'Oswald'; letter-spacing: 1px;
+    font-size: 15px; cursor: pointer; text-decoration: none;
+}
+.btn:hover { background: #bbb; }
+.btn.green { background: var(--green); }
+.btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+.row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.drop {
+    border: 2px dashed var(--line); border-radius: 8px; padding: 22px; text-align: center;
+    color: var(--muted); cursor: pointer;
+}
+.drop:hover { border-color: var(--muted); }
+.drop input { display: none; }
+.results { list-style: none; padding: 0; margin: 12px 0 0; }
+.results li { padding: 4px 0; font-size: 14px; }
+.ok::before { content: "✔ "; color: var(--green); }
+.warn::before { content: "▲ "; color: var(--amber); }
+.bad::before { content: "✖ "; color: var(--red); }
+.cover-preview { max-width: 180px; border-radius: 4px; margin-top: 12px; display: none; }
+.dist { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.dist a {
+    display: block; padding: 14px; border: 1px solid var(--line); border-radius: 6px;
+    color: var(--text); text-decoration: none;
+}
+.dist a:hover { border-color: var(--green); }
+.dist small { color: var(--muted); display: block; }
+.timeline { list-style: none; padding: 0; margin: 0; }
+.timeline li { padding: 6px 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.timeline li span:last-child { color: var(--muted); }
+pre {
+    background: #0e0e0e; border: 1px solid var(--line); border-radius: 5px; padding: 12px;
+    overflow-x: auto; font-size: 13px; white-space: pre-wrap; word-break: break-all;
+}
+.releases { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; margin-top: 14px; }
+.rel { background: #0e0e0e; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; font-size: 13px; }
+.rel img { width: 100%; display: block; aspect-ratio: 1; object-fit: cover; }
+.rel div { padding: 8px; }
+.rel button { margin-top: 6px; width: 100%; padding: 6px; font-size: 13px; }
+iframe.embed { width: 100%; height: 152px; border: 0; border-radius: 12px; margin-top: 12px; }
+.status { font-size: 14px; color: var(--muted); margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="top">
+    <h1>RELEASE DESK</h1>
+    <a href="index.html">← BACK TO SITE</a>
+</div>
+<p class="lede">Get a track from the hard drive to Spotify without fucking up the upload.</p>
+
+<div class="note">
+    <strong>Real talk:</strong> Spotify doesn't let anybody upload straight to it anymore. Every independent
+    track goes through a distributor (DistroKid, TuneCore, CD Baby, etc). This app checks your files, builds your
+    metadata, sends you to your distributor, then finds the release once it's live on Spotify and drops it on your site.
+</div>
+
+<!-- STEP 1 -->
+<section class="step">
+    <h2><span class="num">1</span> TRACK INFO</h2>
+    <div class="grid">
+        <div><label for="title">Song title</label><input id="title" placeholder="Last Time (Again)"></div>
+        <div><label for="artist">Primary artist</label><input id="artist" value="NONEED2KNO"></div>
+        <div><label for="feat">Featured artists</label><input id="feat" placeholder="Leave blank if none"></div>
+        <div><label for="type">Release type</label>
+            <select id="type"><option>Single</option><option>EP</option><option>Album</option></select></div>
+        <div><label for="genre">Primary genre</label>
+            <select id="genre">
+                <option>Hip-Hop/Rap</option><option>Country</option><option>Rock</option>
+                <option>Alternative</option><option>Americana</option>
+            </select></div>
+        <div><label for="genre2">Secondary genre</label>
+            <select id="genre2">
+                <option>Country</option><option>Hip-Hop/Rap</option><option>Rock</option>
+                <option>Alternative</option><option>Americana</option><option>None</option>
+            </select></div>
+        <div><label for="date">Release date</label><input id="date" type="date"></div>
+        <div><label for="writers">Songwriters (legal names)</label><input id="writers" placeholder="First Last, First Last"></div>
+        <div><label for="producer">Producer</label><input id="producer"></div>
+        <div><label for="isrc">ISRC (optional, distributor can assign)</label><input id="isrc" placeholder="USXXX2600001"></div>
+        <div><label for="label">Label / copyright line</label><input id="label" value="NONEED2KNO (Independent)"></div>
+        <div><label for="lang">Lyrics language</label><input id="lang" value="English"></div>
+    </div>
+    <div class="row">
+        <label class="check"><input type="checkbox" id="explicit" checked> Explicit lyrics</label>
+        <label class="check"><input type="checkbox" id="samples"> Contains samples (must be cleared)</label>
+    </div>
+    <div style="margin-top:14px">
+        <label for="pitch">Spotify editorial pitch (what the song's about, mood, instruments — 500 chars max)</label>
+        <textarea id="pitch" maxlength="500" placeholder="Country trap. Banjo over 808s. About saying it's the last time and knowing it ain't."></textarea>
+    </div>
+    <ul class="results" id="metaResults"></ul>
+</section>
+
+<!-- STEP 2 -->
+<section class="step">
+    <h2><span class="num">2</span> AUDIO CHECK</h2>
+    <label class="drop" id="audioDrop">
+        <input type="file" id="audioFile" accept=".wav,.flac,.mp3,audio/*">
+        Drop the master here (WAV 16/24-bit, 44.1kHz or higher)
+    </label>
+    <ul class="results" id="audioResults"></ul>
+</section>
+
+<!-- STEP 3 -->
+<section class="step">
+    <h2><span class="num">3</span> COVER ART CHECK</h2>
+    <label class="drop" id="coverDrop">
+        <input type="file" id="coverFile" accept="image/jpeg,image/png">
+        Drop the cover here (square JPG/PNG, 3000×3000 recommended)
+    </label>
+    <img class="cover-preview" id="coverPreview" alt="Cover preview">
+    <ul class="results" id="coverResults"></ul>
+</section>
+
+<!-- STEP 4 -->
+<section class="step">
+    <h2><span class="num">4</span> TIMELINE</h2>
+    <p class="status" id="timelineHint">Pick a release date in step 1.</p>
+    <ul class="timeline" id="timeline"></ul>
+</section>
+
+<!-- STEP 5 -->
+<section class="step">
+    <h2><span class="num">5</span> SEND IT</h2>
+    <p class="status">Download your release sheet so you can copy-paste everything into the distributor. Then upload there.</p>
+    <div class="row">
+        <button class="btn" id="dlTxt">DOWNLOAD RELEASE SHEET</button>
+        <button class="btn ghost" id="dlJson">DOWNLOAD JSON</button>
+        <button class="btn ghost" id="copyPitch">COPY PITCH</button>
+    </div>
+    <div class="dist" style="margin-top:16px">
+        <a href="https://distrokid.com/new/" target="_blank" rel="noopener">DISTROKID<small>Yearly fee, keep 100%, fast</small></a>
+        <a href="https://www.tunecore.com/" target="_blank" rel="noopener">TUNECORE<small>Keep 100%, pay per plan</small></a>
+        <a href="https://cdbaby.com/" target="_blank" rel="noopener">CD BABY<small>One-time fee per release</small></a>
+        <a href="https://www.amuse.io/" target="_blank" rel="noopener">AMUSE<small>Free tier available</small></a>
+        <a href="https://artists.spotify.com/" target="_blank" rel="noopener">SPOTIFY FOR ARTISTS<small>Pitch the unreleased track here</small></a>
+    </div>
+</section>
+
+<!-- STEP 6 -->
+<section class="step">
+    <h2><span class="num">6</span> FIND IT ON SPOTIFY &amp; PUT IT ON THE SITE</h2>
+    <p class="status">Once it's live, paste the Spotify link — or connect Spotify to pull every NONEED2KNO release automatically.</p>
+    <div class="grid" style="margin-top:12px">
+        <div><label for="spLink">Spotify link (track or album)</label>
+            <input id="spLink" placeholder="https://open.spotify.com/track/..."></div>
+    </div>
+    <div class="row"><button class="btn green" id="useLink">USE THIS LINK</button></div>
+
+    <h3 style="margin-top:24px;font-size:1rem">OR CONNECT SPOTIFY</h3>
+    <p class="status">
+        Needs a free Spotify developer app: go to <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">developer.spotify.com/dashboard</a>,
+        create an app, add this exact page URL as a Redirect URI, and paste the Client ID here. No secret needed.
+    </p>
+    <div class="grid" style="margin-top:12px">
+        <div><label for="clientId">Spotify Client ID</label><input id="clientId" placeholder="32-character client ID"></div>
+        <div><label>Redirect URI to register</label><input id="redirectUri" readonly></div>
+    </div>
+    <div class="row">
+        <button class="btn green" id="connect">CONNECT SPOTIFY</button>
+        <button class="btn ghost" id="loadReleases">LOAD MY RELEASES</button>
+        <button class="btn ghost" id="disconnect">DISCONNECT</button>
+    </div>
+    <p class="status" id="spStatus"></p>
+    <div class="releases" id="releases"></div>
+
+    <div id="embedOut" style="display:none">
+        <iframe class="embed" id="embedFrame" allow="encrypted-media" loading="lazy"></iframe>
+        <p class="status">Paste this into <code>index.html</code> where the "Latest Release" iframe is:</p>
+        <pre id="embedCode"></pre>
+        <div class="row"><button class="btn" id="copyEmbed">COPY EMBED CODE</button></div>
+    </div>
+</section>
+
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const STORE = 'n2k_release_draft';
+const FIELDS = ['title','artist','feat','type','genre','genre2','date','writers','producer','isrc','label','lang','pitch','explicit','samples'];
+let audioInfo = null, coverInfo = null;
+
+function safeGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function safeSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function safeDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+function sGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+function sSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+
+function li(cls, text) { const el = document.createElement('li'); el.className = cls; el.textContent = text; return el; }
+function render(listId, items) { const ul = $(listId); ul.innerHTML = ''; items.forEach(([c, t]) => ul.appendChild(li(c, t))); }
+function val(id) { const el = $(id); return el.type === 'checkbox' ? el.checked : el.value.trim(); }
+
+/* ---------- draft save/restore ---------- */
+function saveDraft() {
+    const d = {}; FIELDS.forEach(f => d[f] = val(f));
+    safeSet(STORE, JSON.stringify(d));
+}
+function loadDraft() {
+    const raw = safeGet(STORE); if (!raw) return;
+    try {
+        const d = JSON.parse(raw);
+        FIELDS.forEach(f => { if (d[f] === undefined) return; const el = $(f); el.type === 'checkbox' ? el.checked = d[f] : el.value = d[f]; });
+    } catch (e) {}
+}
+
+/* ---------- metadata checks ---------- */
+function checkMeta() {
+    const r = [];
+    const title = val('title');
+    if (!title) r.push(['bad', 'Song title is missing.']);
+    else {
+        if (/\b(feat|ft)\.?\b/i.test(title)) r.push(['bad', 'Take "feat." out of the title — put features in the Featured artists box or stores reject it.']);
+        if (title === title.toUpperCase() && /[A-Z]{4,}/.test(title)) r.push(['warn', 'All-caps titles usually get kicked back. Use normal Title Case.']);
+        if (/[!?]{2,}|[^\w\s'(),.&!?:\-]/.test(title)) r.push(['warn', 'Weird symbols or emojis in the title can get flagged.']);
+        if (!r.length) r.push(['ok', 'Title looks clean.']);
+    }
+    if (val('artist').toUpperCase() !== 'NONEED2KNO') r.push(['warn', 'Artist name isn\'t "NONEED2KNO" — make sure it matches your Spotify profile exactly or it lands on the wrong page.']);
+    else r.push(['ok', 'Artist name matches the profile.']);
+    if (!val('writers')) r.push(['bad', 'Songwriter legal names are required for publishing/royalties.']);
+    const isrc = val('isrc').replace(/-/g, '').toUpperCase();
+    if (isrc && !/^[A-Z]{2}[A-Z0-9]{3}\d{7}$/.test(isrc)) r.push(['bad', 'ISRC format is off. Should look like USABC2600001.']);
+    if (val('samples')) r.push(['warn', 'Uncleared samples = takedown. Get clearance before you upload.']);
+    if (val('pitch').length < 60) r.push(['warn', 'Write a real pitch (60+ chars). Editors read it.']);
+    if (!val('date')) r.push(['bad', 'Pick a release date.']);
+    render('metaResults', r);
+}
+
+/* ---------- timeline ---------- */
+function fmt(d) { return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }); }
+function addDays(d, n) { const x = new Date(d); x.setDate(x.getDate() + n); return x; }
+function buildTimeline() {
+    const v = val('date'); const ul = $('timeline'); ul.innerHTML = '';
+    if (!v) { $('timelineHint').textContent = 'Pick a release date in step 1.'; return; }
+    const rel = new Date(v + 'T00:00:00');
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const days = Math.round((rel - today) / 86400000);
+    let hint;
+    if (days < 0) hint = 'That date already passed.';
+    else if (days < 7) hint = `Only ${days} day(s) out. Too late for an editorial pitch — push the date back if playlists matter.`;
+    else if (days < 21) hint = `${days} days out. You can still pitch, but upload to the distributor TODAY.`;
+    else hint = `${days} days out. Good. That's enough time to do it right.`;
+    $('timelineHint').textContent = hint;
+    [
+        [-28, 'Upload to distributor (4 weeks out is the safe move)'],
+        [-21, 'Track shows up in Spotify for Artists → pitch it to editorial'],
+        [-14, 'Pre-save link + start posting snippets'],
+        [-7, 'LAST day to pitch to Spotify editorial'],
+        [-1, 'Teaser post, tell everybody it drops at midnight'],
+        [0, 'Release day — post the link everywhere, update the site'],
+        [7, 'Check Release Radar / Discover Weekly numbers in Spotify for Artists'],
+    ].forEach(([n, t]) => {
+        const d = addDays(rel, n);
+        const el = document.createElement('li');
+        const a = document.createElement('span'); a.textContent = t;
+        const b = document.createElement('span'); b.textContent = fmt(d) + (d < today ? ' (passed)' : '');
+        el.append(a, b); ul.appendChild(el);
+    });
+}
+
+/* ---------- audio ---------- */
+function parseWav(buf) {
+    const v = new DataView(buf);
+    const tag = o => String.fromCharCode(v.getUint8(o), v.getUint8(o+1), v.getUint8(o+2), v.getUint8(o+3));
+    if (buf.byteLength < 12 || tag(0) !== 'RIFF' || tag(8) !== 'WAVE') return null;
+    let o = 12, info = {};
+    while (o + 8 <= buf.byteLength) {
+        const id = tag(o), size = v.getUint32(o + 4, true);
+        if (id === 'fmt ') {
+            info.format = v.getUint16(o + 8, true);
+            info.channels = v.getUint16(o + 10, true);
+            info.sampleRate = v.getUint32(o + 12, true);
+            info.byteRate = v.getUint32(o + 16, true);
+            info.bits = v.getUint16(o + 22, true);
+        } else if (id === 'data') {
+            info.dataSize = size; break;
+        }
+        o += 8 + size + (size % 2);
+    }
+    if (info.byteRate && info.dataSize) info.duration = info.dataSize / info.byteRate;
+    return info.sampleRate ? info : null;
+}
+function mmss(s) { s = Math.round(s); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+
+async function handleAudio(file) {
+    const r = []; audioInfo = { name: file.name, size: file.size };
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (ext === 'wav') {
+        // Header + first chunks are enough; avoid loading a 60MB file into memory twice
+        const info = parseWav(await file.slice(0, 1024 * 1024).arrayBuffer());
+        if (!info) { r.push(['bad', 'Couldn\'t read this WAV header. Re-export it from your DAW.']); }
+        else {
+            if (info.dataSize && info.dataSize > file.size) info.duration = (file.size - 44) / info.byteRate;
+            Object.assign(audioInfo, info);
+            r.push(['ok', `WAV, ${info.channels === 2 ? 'stereo' : info.channels + ' channel(s)'}, ${info.sampleRate / 1000}kHz, ${info.bits}-bit`]);
+            if (info.channels !== 2) r.push(['warn', 'Not stereo. Most distributors want a stereo master.']);
+            if (info.sampleRate < 44100) r.push(['bad', 'Sample rate under 44.1kHz gets rejected.']);
+            if (info.bits < 16) r.push(['bad', 'Bit depth under 16-bit gets rejected.']);
+            if (info.format === 3 && info.bits === 32) r.push(['warn', '32-bit float — some distributors reject it. Export 24-bit to be safe.']);
+            if (info.duration) r.push(['ok', `Length ${mmss(info.duration)}`]);
+        }
+    } else if (ext === 'flac') {
+        r.push(['ok', 'FLAC is lossless — most distributors take it. WAV is still the safest.']);
+    } else {
+        r.push(['bad', `${ext.toUpperCase()} is lossy. Upload a WAV master, not an MP3 — it'll sound worse and some stores reject it.`]);
+    }
+    if (audioInfo.duration && audioInfo.duration < 31) r.push(['warn', 'Under 31 seconds won\'t count as a stream on Spotify.']);
+    if (audioInfo.duration && audioInfo.duration > 600) r.push(['warn', 'Over 10 minutes — make sure that\'s on purpose.']);
+    if (/demo|rough|mix ?\d|v\d|final ?final/i.test(file.name)) r.push(['warn', 'File name says demo/rough/version — make sure this is the actual master.']);
+    render('audioResults', r);
+}
+
+/* ---------- cover ---------- */
+function handleCover(file) {
+    const r = []; const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+        const w = img.naturalWidth, h = img.naturalHeight;
+        coverInfo = { name: file.name, width: w, height: h, size: file.size };
+        $('coverPreview').src = url; $('coverPreview').style.display = 'block';
+        r.push([w === h ? 'ok' : 'bad', `${w}×${h}${w === h ? ' — square' : ' — NOT square. Has to be 1:1.'}`]);
+        if (Math.min(w, h) < 1600) r.push(['bad', 'Under 1600px gets rejected. Export at 3000×3000.']);
+        else if (Math.min(w, h) < 3000) r.push(['warn', 'Passes, but 3000×3000 is what Spotify recommends.']);
+        else r.push(['ok', 'Resolution is good.']);
+        if (!/^image\/(jpeg|png)$/.test(file.type)) r.push(['bad', 'Has to be JPG or PNG.']);
+        if (file.size > 10 * 1024 * 1024) r.push(['warn', `${(file.size / 1048576).toFixed(1)}MB — some distributors cap uploads, try under 10MB.`]);
+        r.push(['warn', 'Manual check: no URLs, no social handles, no "Spotify" logos, no prices, no blurry text, and nothing borrowed you don\'t own.']);
+        render('coverResults', r);
+    };
+    img.onerror = () => render('coverResults', [['bad', 'Couldn\'t open that image.']]);
+    img.src = url;
+}
+
+/* ---------- exports ---------- */
+function collect() {
+    const d = {}; FIELDS.forEach(f => d[f] = val(f));
+    d.isrc = d.isrc.replace(/-/g, '').toUpperCase();
+    d.audio = audioInfo; d.cover = coverInfo;
+    return d;
+}
+function download(name, text, type) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([text], { type }));
+    a.download = name; document.body.appendChild(a); a.click(); a.remove();
+}
+function slug(s) { return (s || 'untitled').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+function sheetText(d) {
+    const L = [
+        'NONEED2KNO — RELEASE SHEET', '='.repeat(30),
+        `Title:            ${d.title}`,
+        `Primary artist:   ${d.artist}`,
+        `Featured:         ${d.feat || '—'}`,
+        `Type:             ${d.type}`,
+        `Genre:            ${d.genre}${d.genre2 !== 'None' ? ' / ' + d.genre2 : ''}`,
+        `Release date:     ${d.date || 'TBD'}`,
+        `Explicit:         ${d.explicit ? 'Yes' : 'No'}`,
+        `Language:         ${d.lang}`,
+        `Songwriters:      ${d.writers}`,
+        `Producer:         ${d.producer || '—'}`,
+        `ISRC:             ${d.isrc || 'Assign via distributor'}`,
+        `© / ℗ line:       ${d.date ? d.date.slice(0, 4) : new Date().getFullYear()} ${d.label}`,
+        `Samples:          ${d.samples ? 'YES — clearance required' : 'None'}`, '',
+        'AUDIO', '-----',
+        d.audio ? `${d.audio.name}${d.audio.sampleRate ? ` | ${d.audio.sampleRate / 1000}kHz ${d.audio.bits}-bit | ${d.audio.duration ? mmss(d.audio.duration) : ''}` : ''}` : 'Not checked', '',
+        'COVER', '-----',
+        d.cover ? `${d.cover.name} | ${d.cover.width}x${d.cover.height}` : 'Not checked', '',
+        'SPOTIFY PITCH', '-------------', d.pitch || '—',
+    ];
+    return L.join('\n');
+}
+
+/* ---------- Spotify embed ---------- */
+function parseSpotify(link) {
+    const m = String(link).match(/(track|album)[/:]([A-Za-z0-9]{22})/);
+    return m ? { kind: m[1], id: m[2] } : null;
+}
+function showEmbed(kind, id) {
+    const src = `https://open.spotify.com/embed/${kind}/${id}`;
+    $('embedFrame').src = src;
+    $('embedFrame').style.height = kind === 'album' ? '352px' : '152px';
+    $('embedCode').textContent = `<iframe src="${src}" allow="encrypted-media"></iframe>`;
+    $('embedOut').style.display = 'block';
+    $('embedOut').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ---------- Spotify auth (PKCE, no secret) ---------- */
+const REDIRECT = location.origin + location.pathname;
+function rand(n) { const a = new Uint8Array(n); crypto.getRandomValues(a); return Array.from(a, b => ('0' + b.toString(16)).slice(-2)).join(''); }
+async function challenge(v) {
+    const h = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(v));
+    return btoa(String.fromCharCode(...new Uint8Array(h))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+async function connect() {
+    const id = val('clientId');
+    if (!/^[a-f0-9]{32}$/i.test(id)) { $('spStatus').textContent = 'That doesn\'t look like a Client ID (32 letters/numbers).'; return; }
+    safeSet('n2k_client_id', id);
+    const verifier = rand(48), state = rand(8);
+    sSet('n2k_verifier', verifier); sSet('n2k_state', state);
+    saveDraft();
+    const p = new URLSearchParams({
+        client_id: id, response_type: 'code', redirect_uri: REDIRECT, state,
+        code_challenge_method: 'S256', code_challenge: await challenge(verifier),
+    });
+    location.href = 'https://accounts.spotify.com/authorize?' + p;
+}
+async function finishAuth() {
+    const q = new URLSearchParams(location.search);
+    if (!q.get('code') && !q.get('error')) return;
+    history.replaceState(null, '', REDIRECT);
+    if (q.get('error')) { $('spStatus').textContent = 'Spotify said no: ' + q.get('error'); return; }
+    if (q.get('state') !== sGet('n2k_state')) { $('spStatus').textContent = 'Login state didn\'t match. Try connecting again.'; return; }
+    try {
+        const res = await fetch('https://accounts.spotify.com/api/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                grant_type: 'authorization_code', code: q.get('code'), redirect_uri: REDIRECT,
+                client_id: safeGet('n2k_client_id') || '', code_verifier: sGet('n2k_verifier') || '',
+            }),
+        });
+        const j = await res.json();
+        if (!j.access_token) throw new Error(j.error_description || j.error || 'no token');
+        sSet('n2k_token', j.access_token);
+        sSet('n2k_token_exp', String(Date.now() + j.expires_in * 1000));
+        $('spStatus').textContent = 'Connected. Pulling releases…';
+        loadReleases();
+    } catch (e) { $('spStatus').textContent = 'Token exchange failed: ' + e.message; }
+}
+function token() {
+    const t = sGet('n2k_token'), exp = Number(sGet('n2k_token_exp') || 0);
+    return t && Date.now() < exp ? t : null;
+}
+async function api(path) {
+    const res = await fetch('https://api.spotify.com/v1' + path, { headers: { Authorization: 'Bearer ' + token() } });
+    if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
+    return res.json();
+}
+async function loadReleases() {
+    if (!token()) { $('spStatus').textContent = 'Not connected (or the login expired). Hit CONNECT SPOTIFY.'; return; }
+    const name = val('artist') || 'NONEED2KNO';
+    try {
+        $('spStatus').textContent = `Searching Spotify for ${name}…`;
+        const s = await api('/search?type=artist&limit=10&q=' + encodeURIComponent(name));
+        const artist = s.artists.items.find(a => a.name.toLowerCase() === name.toLowerCase()) || s.artists.items[0];
+        if (!artist) { $('spStatus').textContent = 'No artist found by that name yet. If you just released, give it a day.'; return; }
+        const albums = await api(`/artists/${artist.id}/albums?include_groups=album,single&limit=50`);
+        $('spStatus').textContent = `${artist.name} — ${albums.items.length} release(s) on Spotify. Newest first. Click one to embed it.`;
+        const box = $('releases'); box.innerHTML = '';
+        albums.items.sort((a, b) => b.release_date.localeCompare(a.release_date)).forEach(al => {
+            const card = document.createElement('div'); card.className = 'rel';
+            const img = document.createElement('img'); img.alt = al.name; img.loading = 'lazy';
+            img.src = (al.images[1] || al.images[0] || {}).url || '';
+            const body = document.createElement('div');
+            const t = document.createElement('strong'); t.textContent = al.name;
+            const meta = document.createElement('div'); meta.style.padding = '0'; meta.style.color = 'var(--muted)';
+            meta.textContent = `${al.album_type} · ${al.release_date}`;
+            const b = document.createElement('button'); b.className = 'btn'; b.textContent = 'EMBED';
+            b.onclick = () => showEmbed('album', al.id);
+            body.append(t, meta, b); card.append(img, body); box.appendChild(card);
+        });
+    } catch (e) { $('spStatus').textContent = 'Spotify request failed: ' + e.message; }
+}
+
+/* ---------- wire up ---------- */
+function bindDrop(dropId, inputId, handler) {
+    const drop = $(dropId);
+    $(inputId).addEventListener('change', e => e.target.files[0] && handler(e.target.files[0]));
+    drop.addEventListener('dragover', e => { e.preventDefault(); drop.style.borderColor = 'var(--green)'; });
+    drop.addEventListener('dragleave', () => drop.style.borderColor = '');
+    drop.addEventListener('drop', e => { e.preventDefault(); drop.style.borderColor = ''; e.dataTransfer.files[0] && handler(e.dataTransfer.files[0]); });
+}
+
+loadDraft();
+$('clientId').value = safeGet('n2k_client_id') || '';
+$('redirectUri').value = REDIRECT;
+FIELDS.forEach(f => $(f).addEventListener('input', () => { saveDraft(); checkMeta(); buildTimeline(); }));
+FIELDS.forEach(f => $(f).addEventListener('change', () => { saveDraft(); checkMeta(); buildTimeline(); }));
+checkMeta(); buildTimeline();
+bindDrop('audioDrop', 'audioFile', handleAudio);
+bindDrop('coverDrop', 'coverFile', handleCover);
+
+$('dlTxt').onclick = () => { const d = collect(); download(`${slug(d.title)}-release-sheet.txt`, sheetText(d), 'text/plain'); };
+$('dlJson').onclick = () => { const d = collect(); download(`${slug(d.title)}-release.json`, JSON.stringify(d, null, 2), 'application/json'); };
+$('copyPitch').onclick = () => navigator.clipboard.writeText(val('pitch')).then(() => $('copyPitch').textContent = 'COPIED');
+$('copyEmbed').onclick = () => navigator.clipboard.writeText($('embedCode').textContent).then(() => $('copyEmbed').textContent = 'COPIED');
+$('useLink').onclick = () => {
+    const p = parseSpotify(val('spLink'));
+    if (!p) { $('spStatus').textContent = 'That\'s not a Spotify track or album link.'; return; }
+    $('spStatus').textContent = ''; showEmbed(p.kind, p.id);
+};
+$('connect').onclick = connect;
+$('loadReleases').onclick = loadReleases;
+$('disconnect').onclick = () => { sSet('n2k_token', ''); $('releases').innerHTML = ''; $('spStatus').textContent = 'Disconnected.'; };
+finishAuth();
+</script>
+</body>
+</html>
